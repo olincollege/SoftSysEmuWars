@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "cpu.h"
+#include "chip-8.h"
 
 // Clear the display
 void op_00E0() {

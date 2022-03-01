@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "cpu.h"
+#include "chip-8.h"
 
 const unsigned int START_ADDRESS = 0x200;
 const unsigned int FONTSET_START_ADDRESS = 0x50;
@@ -44,5 +44,5 @@ void init() {
     memset(V, 0, sizeof(V));                // Clear registers V0-VF
     memset(memory, 0, sizeof(memory));      // Clear memory
 
-    load_font()
+    load_font();
 }
