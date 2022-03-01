@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "chip8cpu.h"
+#include "cpu.h"
 
 const unsigned int START_ADDRESS = 0x200;
 const unsigned int FONTSET_START_ADDRESS = 0x50;
@@ -25,27 +25,24 @@ unsigned char chip8_fontset[80] =
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-void init() {
-    struct chip8_cpu chip8;
-    
-    chip8.PC = START_ADDRESS; // this is where the system expects the app to be loaded
-    chip8.opcode = 0;
-    chip8.I = 0;
-    chip8.stack_pointer = 0;
-
-    memset(chip8.display, 0, sizeof(chip8.display));    // Clear display
-    memset(chip8.stack, 0, sizeof(chip8.stack));        // Clear stack
-    memset(chip8.V, 0, sizeof(chip8.V));                // Clear registers V0-VF
-    memset(chip8.memory, 0, sizeof(chip8.memory));      // Clear memory
-    
-    // Load fontset
+void load_font() {
     for(int i = 0; i < 80; ++i) {
-        chip8.memory[FONTSET_START_ADDRESS + i] = chip8_fontset[i];
+        memory[FONTSET_START_ADDRESS + i] = chip8_fontset[i];
     }	
 }
 
+void init() {
+    struct chip8_cpu chip8;
+    
+    PC = START_ADDRESS; // this is where the system expects the app to be loaded
+    opcode = 0;
+    I = 0;
+    stack_pointer = 0;
 
-int main() {
-    init(); 
-    return 0;
+    memset(display, 0, sizeof(display));    // Clear display
+    memset(stack, 0, sizeof(stack));        // Clear stack
+    memset(V, 0, sizeof(V));                // Clear registers V0-VF
+    memset(memory, 0, sizeof(memory));      // Clear memory
+
+    load_font()
 }
