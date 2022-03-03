@@ -2,9 +2,6 @@
 #include <string.h>
 #include "chip-8.h"
 
-const unsigned int START_ADDRESS = 0x200;
-const unsigned int FONTSET_START_ADDRESS = 0x50;
-
 unsigned char chip8_fontset[80] =
     { 
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -45,4 +42,19 @@ void init() {
     memset(memory, 0, sizeof(memory));      // Clear memory
 
     load_font();
+}
+
+void load_game(char *filename) {
+    FILE *game;
+
+    // Read the binary game file
+    game = fopen(filename, "rb");
+
+    if (NULL == game) {
+        fprintf(stderr, "Unable to open game: %s\n", filename);
+    }
+    // Read the game data into memory starting at address 0x200
+    fread(&memory[0x200], 1, MAX_GAME_SIZE, game);
+
+    fclose(game);
 }
