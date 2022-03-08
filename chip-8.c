@@ -52,9 +52,44 @@ void load_game(char *filename) {
 
     if (NULL == game) {
         fprintf(stderr, "Unable to open game: %s\n", filename);
+        exit(1);
     }
     // Read the game data into memory starting at address 0x200
     fread(&memory[0x200], 1, MAX_GAME_SIZE, game);
 
     fclose(game);
+}
+
+/*
+Represents one cycle of the CHIP-8. It fetches an opcode, then decodes it
+and executes whatever it says to do. 
+
+Opcodes: opcodes are two bytes but are stored in memory as
+a single byte. This means we have to fetch two successive bytes from memory 
+to get the next opcode. The program counter points to our location in memory. 
+Every time we fetch a new opcode we must increment it by two. 
+
+Fetching: First we fetch the byte where the program counter is pointing. 
+We shift it over by a byte (so if the opcode was 11111111 we would have 
+1111111100000000) and fetch the next byte from memory. We can combine these by 
+using the OR bitwise operation to obtain an entire opcode. We then need to
+increase the program counter by two, since fetching one opcode moved us 
+two bytes along in memory. 
+
+Note that we need to remember that we have incremented the PC BEFORE decoding
+or executing the opcodes, since opcodes themselves can increment or decrement
+the PC. 
+*/
+
+void run_cycle() {
+    // fetch the next opcode
+    opcode = (memory[PC] << 8) | memory [PC + 1];
+    // increment the program counter
+    PC += 2;
+
+    switch (opcode & 0xF000) {
+        case default: 
+            fprintf(stderr, "Unknown opcode: %i", opcode);
+    }
+
 }

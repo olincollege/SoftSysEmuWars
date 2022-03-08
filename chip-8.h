@@ -24,3 +24,4 @@ extern unsigned char keys[16]; // store the states of the keys
 
 void init();
 void load_game(char *filename);
+void run_cycle();
