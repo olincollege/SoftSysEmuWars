@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdint.h>
-#include "chip-8.h"
+#include "opcodes.h"
 
 // Clear the display
 void op_00E0() {
@@ -11,7 +9,7 @@ void op_00E0() {
 // Essentially go back down the stack 
 void op_00EE() {
     --stack_pointer;
-    PC = chip.stack[chip8.stack_pointer];
+    PC = stack[stack_pointer];
 }
 
 // Jump to location nnn in memory
@@ -24,7 +22,7 @@ void op_1nnn() {
 // Call subroutine at nnn
 void op_2nnn() {
     //store where we are
-    stack[stack_pointer] = pc;
+    stack[stack_pointer] = PC;
     // now increment the stack pointer 
     ++stack_pointer;
     // and now jump to the new address
@@ -54,7 +52,7 @@ void op_7xnn() {
 // Set the index register I to nnn
 void op_Annn() {
     uint16_t address = opcode & 0x0FFF;
-    I = address
+    I = address;
 }
 
 /* 
@@ -73,14 +71,44 @@ void op_Dxyn() {
     // get the x and y register addresses
     uint8_t Vx = (opcode & 0x0F00) >> 8;
     uint8_t Vy = (opcode & 0x00F0) >> 4;
+    uint8_t height = opcode & 0x000F;
 
     // get the x and y positions from the registers 
     // wrap if the coordinates are bigger than the display width/height
-    uint8_t xPos = registers[Vx] % 64;
-    uint8_t yPos = registers[Vy] % 32;
+    uint8_t x_pos = V[Vx] % SCREEN_WIDTH;
+    uint8_t y_pos = V[Vy] % SCREEN_HEIGHT;
     
     // set the collision flag to 0
-    registers[0xF] = 0;
+    V[0xF] = 0;
 
-    // TODO: iterate over the sprite pixels, find collisions, XOR 
+    // iterate over all the sprite rows
+    for (int row = 0; row < height; row++) {
+        uint8_t spriteByte = memory[I + row];
+        // iterate over each column, there are guarunteed to be 8. 
+        // we are working with a single pixel now 
+        // printf("Sprite Byte: %" PRIu8 "\n", spriteByte);
+        for (int col = 0; col < 8; col++) {
+            // get the next pixel in the sprite
+            uint8_t spritePixel = (spriteByte >> (7 - col)) & 0x1;
+            // make a pointer to the corresponding pixel in the display
+            // we do this because we will want to modify the pixel directly
+            uint8_t * displayPixel = &display[(y_pos + row) * SCREEN_WIDTH + (x_pos + col)];
+            // printf("Sprite Pixel: %" PRIu8 "\n", spritePixel);
+
+            if (spritePixel) {
+                // check if this would cause a collision
+                if (spritePixel & *displayPixel) {
+                    V[0xF] = 1;
+                }
+
+                // set the new pixel value in the display
+                *displayPixel = *displayPixel ^ 0xFF;
+                printf("Sprite Pixel: %" PRIu8 "\n", spritePixel);
+            } else {
+                // TODO: not sure if this line is necessary, revisit later
+                *displayPixel = *displayPixel ^ 0;
+            }
+
+        }
+    }
 }
