@@ -1,6 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "chip-8.h"
+
+// define the external variables here
+uint16_t PC = START_ADDRESS; 
+uint16_t opcode = 0;
+uint16_t I = 0;
+uint16_t stack_pointer = 0;
+
+uint8_t memory[MEMORY_SIZE]; 
+uint8_t display[SCREEN_WIDTH*SCREEN_HEIGHT];
+uint16_t stack[16];
+uint8_t keys[16];
+uint8_t V[16];
+
+uint8_t delay_timer = 0;
+uint8_t sound_timer = 0;
 
 unsigned char chip8_fontset[80] =
     { 
@@ -28,9 +44,8 @@ void load_font() {
     }	
 }
 
-void init() {
-    struct chip8_cpu chip8;
-    
+/*
+void init_cpu() {    
     PC = START_ADDRESS; // this is where the system expects the app to be loaded
     opcode = 0;
     I = 0;
@@ -43,8 +58,9 @@ void init() {
 
     load_font();
 }
+*/
 
-void load_game(char *filename) {
+void load_game(const char *filename) {
     FILE *game;
 
     // Read the binary game file
@@ -81,6 +97,7 @@ or executing the opcodes, since opcodes themselves can increment or decrement
 the PC. 
 */
 
+/*
 void run_cycle() {
     // fetch the next opcode
     opcode = (memory[PC] << 8) | memory [PC + 1];
@@ -88,8 +105,9 @@ void run_cycle() {
     PC += 2;
 
     switch (opcode & 0xF000) {
-        case default: 
+        default: 
             fprintf(stderr, "Unknown opcode: %i", opcode);
     }
 
 }
+*/
