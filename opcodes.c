@@ -52,7 +52,7 @@ void op_4xnn() {
 // Skip one instruction if the values in Vx and Vy are equal
 void op_5xy0() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if (V[x] == V[y]) {
         PC += 2;
@@ -82,7 +82,7 @@ void op_7xnn() {
 // Set the value of Vx to the value of Vy
 void op_8xy0() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     V[x] = V[y];
 }
@@ -90,7 +90,7 @@ void op_8xy0() {
 // Set Vx to the bitwise OR of Vx and Vy
 void op_8xy1() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     V[x] = V[x] | V[y];
 }
@@ -98,7 +98,7 @@ void op_8xy1() {
 // Set Vx to the bitwise AND of Vx and Vy
 void op_8xy2() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     V[x] = V[x] & V[y];
 }
@@ -106,7 +106,7 @@ void op_8xy2() {
 // Set Vx to the bitwise XOR of Vx and Vy
 void op_8xy3() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     V[x] = V[x] ^ V[y];
 }
@@ -114,7 +114,7 @@ void op_8xy3() {
 // Set Vx to Vx + Vy. If the result is greater than 255, set carry flag to 1
 void op_8xy4() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     uint16_t sum = V[x] + V[y];
 
@@ -130,7 +130,7 @@ void op_8xy4() {
 // Set Vx to Vx - Vy. If Vx is larger than Vy, set carry flag to 1
 void op_8xy5() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if (x > y) {
         V[0xF] = 1;
@@ -155,7 +155,7 @@ void op_8xy6() {
 // Set Vx to Vy - Vx. If Vy is larger than Vx, set carry flag to 1
 void op_8xy7() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if (y > x) {
         V[0xF] = 1;
@@ -181,7 +181,7 @@ void op_8xyE() {
 // Skip the next instruction if Vx and Vy are not equal
 void op_9xy0() {
     uint8_t x = (opcode & 0x0F00) >> 8;
-    uint8_t y = (opcode & 0x0F00) >> 4;
+    uint8_t y = (opcode & 0x00F0) >> 4;
 
     if (V[x] != V[y]) {
         PC += 2;
