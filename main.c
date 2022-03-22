@@ -91,10 +91,9 @@ int main(int argc, char const *argv[])
                         op_00EE();
                         break;
                     default:
-                        fprintf(stderr, "Unknown opcode: %x", opcode);
+                        fprintf(stderr, "Unknown opcode: %x\n", opcode);
                         //exit(1);
-                    }
-                    break;
+                    } break;
                 case 0x1000:
                     op_1nnn();
                     break;
@@ -146,9 +145,12 @@ int main(int argc, char const *argv[])
                         op_8xyE();
                         break;
                     default:
-                        fprintf(stderr, "Unknown opcode: %x", opcode);
+                        fprintf(stderr, "Unknown opcode: %x\n", opcode);
                         //exit(1);
-                    }
+                    } break;
+                case 0x9000:
+                    op_9xy0();
+                    break;
                 case 0xA000:
                     op_Annn();
                     break;
@@ -162,52 +164,53 @@ int main(int argc, char const *argv[])
                     op_Dxyn();
                     break;
                 case 0xE000:
-                    switch (opcode & 0xFF) {
-                    case 0x009E:
-                        op_Ex9E();
-                        break;
-                    case 0x00A1:
-                        op_ExA1();
-                        break;
-                    default:
-                        fprintf(stderr, "Unknown opcode: %x", opcode);
-                        //exit(1);
-                    }
+                    switch (opcode & 0x00FF) {
+                        case 0x009E:
+                            op_Ex9E();
+                            break;
+                        case 0x00A1:
+                            op_ExA1();
+                            break;
+                        default:
+                            fprintf(stderr, "Unknown opcode: %x\n", opcode);
+                            //exit(1);
+                    } break;
                 case 0xF000:
-                    switch (opcode & 0xFF) {
-                    case 0x0007:
-                        op_Fx07();
-                        break;
-                    case 0x000A:
-                        op_Fx0A();
-                        break;
-                    case 0x0015:
-                        op_Fx15();
-                        break;
-                    case 0x0018:
-                        op_Fx18();
-                        break;
-                    case 0x001E:
-                        op_Fx1E();
-                        break;
-                    case 0x0029:
-                        op_Fx29();
-                        break;
-                    case 0x0033:
-                        op_Fx33();
-                        break;
-                    case 0x0055:
-                        op_Fx55();
-                        break;
-                    case 0x0065:
-                        op_Fx65();
-                        break;
-                    default:
-                        fprintf(stderr, "Unknown opcode: %x", opcode);
-                        //exit(1);
-                    }
+                    switch (opcode & 0x00FF) {
+                        case 0x0007:
+                            op_Fx07();
+                            break;
+                        case 0x000A:
+                            op_Fx0A();
+                            break;
+                        case 0x0015:
+                            op_Fx15();
+                            break;
+                        case 0x0018:
+                            op_Fx18();
+                            break;
+                        case 0x001E:
+                            op_Fx1E();
+                            break;
+                        case 0x0029:
+                            op_Fx29();
+                            break;
+                        case 0x0033:
+                            op_Fx33();
+                            break;
+                        case 0x0055:
+                            op_Fx55();
+                            break;
+                        case 0x0065:
+                            op_Fx65();
+                            break;
+                        default:
+                            printf("running default in the F switch statement");
+                            fprintf(stderr, "Unknown opcode: %x\n", opcode);
+                            //exit(1);
+                    } break;
                 default: 
-                    fprintf(stderr, "Unknown opcode: %x", opcode);
+                    fprintf(stderr, "Unknown opcode: %x\n", opcode);
                     //exit(1);
             }   
             // update the timers

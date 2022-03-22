@@ -14,7 +14,7 @@ void op_00EE() {
 
 // Jump to location nnn in memory
 void op_1nnn() {
-    // Mask to grab only the last three bytes of the opcode
+    // Mask to grab only the last three digits of the opcode
     // then set the program counter to that address 
     PC = opcode & 0x0FFF;
 }
@@ -31,10 +31,10 @@ void op_2nnn() {
 
 // Skip one instruction if Vx = nn
 void op_3xnn() {
-    uint8_t reg = (opcode & 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t byte = opcode & 0x00FF;
 
-    if (V[reg] == byte) {
+    if (V[x] == byte) {
         PC += 2;
     }
 }
