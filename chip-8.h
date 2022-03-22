@@ -1,4 +1,7 @@
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define START_ADDRESS 0x200
 #define FONTSET_START_ADDRESS 0x50
@@ -30,5 +33,6 @@ extern uint16_t stack_pointer;
 extern uint8_t keys[16]; // store the states of the keys
 
 void load_font();
+void init_cpu();
 void load_game(const char *filename);
-//void run_cycle();
+int keymap(unsigned char k);
