@@ -78,6 +78,7 @@ int main(int argc, char const *argv[])
 
             // fetch the next opcode and increment the program counter
             opcode = (memory[PC] << 8) | memory [PC + 1];
+            printf("Opcode: %x\n", opcode);
             PC += 2;
 
             // decode and execute

@@ -41,10 +41,10 @@ void op_3xnn() {
 
 // Skip one instruction if Vx is not nn
 void op_4xnn() {
-    uint8_t reg = (opcode & 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t byte = opcode & 0x00FF;
 
-    if (V[reg] != byte) {
+    if (V[x] != byte) {
         PC += 2;
     }
 }
@@ -62,21 +62,21 @@ void op_5xy0() {
 // Set regeister Vx to nn
 void op_6xnn() {
     // mask to find a) the register and b) what to set it to
-    uint8_t reg = (opcode & 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t byte = opcode & 0x00FF;
 
     // set the given register
-    V[reg] = byte;
+    V[x] = byte;
 }
 
 // Add value nn to register Vx
 void op_7xnn() {
     // mask to find a) the register and b) what to set it to
-    uint8_t reg = (opcode & 0x0F00) >> 8;
+    uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t byte = opcode & 0x00FF;
 
     // set the given register
-    V[reg] += byte;
+    V[x] += byte;
 }
 
 // Set the value of Vx to the value of Vy
@@ -132,7 +132,7 @@ void op_8xy5() {
     uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t y = (opcode & 0x00F0) >> 4;
 
-    if (x > y) {
+    if (V[x] > V[y]) {
         V[0xF] = 1;
     } else {
         V[0xF] = 0;
@@ -157,7 +157,7 @@ void op_8xy7() {
     uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t y = (opcode & 0x00F0) >> 4;
 
-    if (y > x) {
+    if (V[y] > V[x]) {
         V[0xF] = 1;
     } else {
         V[0xF] = 0;
@@ -276,7 +276,6 @@ void op_Ex9E() {
 }
 
 // Skip the next instruction if the key in Vx is NOT pressed
-// Skip the next instruction if the key in Vx is pressed
 void op_ExA1() {
     uint8_t x = (opcode & 0x0F00) >> 8;
     uint8_t key = V[x];
